@@ -12,12 +12,3 @@ I must've implemented this at least 15 times when recruiting at HFT firms; I wan
   - [ ] Memory Optimization
   - [ ] JSON Support
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
