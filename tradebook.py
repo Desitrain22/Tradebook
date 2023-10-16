@@ -1,4 +1,5 @@
 import heapq
+import json
 
 
 class Order:
@@ -9,6 +10,14 @@ class Order:
         self.price = price
         self.qty = qty
         self.order_id = order_id
+
+    def order_from_dict(order_dict: dict):
+        return Order(
+            order_type=int(order_dict["order_type"]),
+            price=float(order_dict["price"]),
+            qty=int(order_dict["qty"]),
+            order_id=order_dict["order_id"],
+        )
 
     def __gt__(self, other):
         return self.price > other.price
@@ -84,4 +93,12 @@ def test():
     print(book)
 
 
-test()
+if __name__ == "__main__":
+    book = Order_Book()
+    ordersJSON = open("orders.json")
+    orders = json.load(ordersJSON)["orders"]
+    orders.reverse()
+
+    while len(orders) > 0:
+        book.add_order(Order.order_from_dict(orders.pop()))
+        print(book)
