@@ -30,8 +30,7 @@ class Order:
 
     def __repr__(self):
         return (
-            "{"
-            + "Order ID: "
+            "Order ID: "
             + str(self.order_id)
             + ", "
             + "Price: "
@@ -42,7 +41,6 @@ class Order:
             + ", "
             + "Order Type: "
             + ("buy" if self.order_type else "sell")
-            + "}"
         )
 
 
@@ -80,25 +78,30 @@ class Order_Book:
             if new_order.qty > 0:
                 heapq.heappush(self.asks, new_order)
 
+    def read_order_from_json(self, filename="orders.json"):
+        ordersJSON = open(filename)
+        orders = json.load(ordersJSON)["orders"]
+        orders.reverse()
 
-def test():
-    book = Order_Book()
-    book.add_order(Order(0, 100, 10, "1"))  # Selling 10 @ 100
-    book.add_order(Order(1, 94, 5, "2"))  # Buying 5 @ 94
-    book.add_order(Order(1, 100, 2, "3"))  # Buying 2 @ 100, Partial fill on order #1
-    print(book)
-    book.add_order(
-        Order(0, 93, 7, "4")
-    )  # Selling 7 @ 93, Full fill on order #2, order for 2 @ 93 ends up top of ask heap
-    print(book)
+        while len(orders) > 0:
+            # self.add_order(Order.order_from_dict(orders.pop()))  ehhh lets make this verbose
+            order = Order.order_from_dict(orders.pop())
+            print("Adding Order: ", order)
+            self.add_order(order)
+            print(self, "\n")
 
 
 if __name__ == "__main__":
     book = Order_Book()
-    ordersJSON = open("orders.json")
-    orders = json.load(ordersJSON)["orders"]
-    orders.reverse()
+    book.read_order_from_json("orders.json")
 
-    while len(orders) > 0:
-        book.add_order(Order.order_from_dict(orders.pop()))
-        print(book)
+# def test():
+#     book = Order_Book()
+#     book.add_order(Order(0, 100, 10, "1"))  # Selling 10 @ 100
+#     book.add_order(Order(1, 94, 5, "2"))  # Buying 5 @ 94
+#     book.add_order(Order(1, 100, 2, "3"))  # Buying 2 @ 100, Partial fill on order #1
+#     print(book)
+#     book.add_order(
+#         Order(0, 93, 7, "4")
+#     )  # Selling 7 @ 93, Full fill on order #2, order for 2 @ 93 ends up top of ask heap
+#     print(book)
