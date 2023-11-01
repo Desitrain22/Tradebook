@@ -6,7 +6,7 @@ class Order:
     def __init__(
         self, order_type: int = 0, price: float = 0, qty: int = 0, order_id: str = None
     ):
-        """_summary_
+        """Constructor to initialize an Order object (placed in a Limit_Order_Book
 
         Args:
             order_type (int, optional): 1 for a buy order, 0 for a sell order. Defaults to 0 (sell).
