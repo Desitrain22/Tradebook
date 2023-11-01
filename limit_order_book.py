@@ -6,12 +6,28 @@ class Order:
     def __init__(
         self, order_type: int = 0, price: float = 0, qty: int = 0, order_id: str = None
     ):
+        """_summary_
+
+        Args:
+            order_type (int, optional): 1 for a buy order, 0 for a sell order. Defaults to 0 (sell).
+            price (float, optional): A floating point representing a dollar amount for the order price. Defaults to 0.
+            qty (int, optional): An integer representing the amount of shares (fractional shares not supported). Defaults to 0.
+            order_id (str, optional): A string to represent a unique order identifier. Defaults to None.
+        """
         self.order_type = order_type  # 1 for bid, 0 for ask
         self.price = price
         self.qty = qty
         self.order_id = order_id
 
     def order_from_dict(order_dict: dict):
+        """Constructor for initializing an order from a dictionary. Ideal for constructing when reading files from a JSON
+
+        Args:
+            order_dict (dict): A dictionary with key value pairs corresponding to the arguments of the basic constructor __init__
+
+        Returns:
+            _type_: An Order object
+        """
         return Order(
             order_type=int(order_dict["order_type"]),
             price=float(order_dict["price"]),
@@ -44,7 +60,7 @@ class Order:
         )
 
 
-class Order_Book:
+class Limit_Order_Book:
     def __init__(self):
         self.bids = []
         self.asks = []
@@ -53,6 +69,12 @@ class Order_Book:
         return "Bids:\n" + str(self.bids) + "\n" + "Asks:\n" + str(self.asks)
 
     def add_order(self, new_order: Order):
+        """Given an Order, attempts to fill existing orders (including partial fills) if possible, and adds the order (or resulting partial order) to the limit order book.
+        Orders are mantained in two min heaps, with priority given to the best available price (highest bid/lowest ask)
+
+        Args:
+            new_order (Order): A new Order object to the exchange
+        """
         if new_order.order_type:  # If it's a buy order ("bid")
             if len(self.asks) != 0:
                 while self.asks[0].price <= new_order.price:
@@ -92,7 +114,7 @@ class Order_Book:
 
 
 if __name__ == "__main__":
-    book = Order_Book()
+    book = Limit_Order_Book()
     book.read_order_from_json("orders.json")
 
 # def test():
